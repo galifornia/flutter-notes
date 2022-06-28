@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:mynotes/firebase_options.dart';
+import 'package:mynotes/views/email_verification_view.dart';
 import 'package:mynotes/views/login_view.dart';
 import 'package:mynotes/views/register_view.dart';
 
@@ -31,11 +32,12 @@ class HomePage extends StatelessWidget {
             switch (snapshot.connectionState) {
               case ConnectionState.done:
                 final user = FirebaseAuth.instance.currentUser;
-
+                // reload in order to check if user has already verified email
+                user?.reload();
                 if (user?.emailVerified ?? false) {
                   return const Text("done");
                 } else {
-                  return const Text("You need to verify your email");
+                  return const EmailVerificationView();
                 }
 
               default:
